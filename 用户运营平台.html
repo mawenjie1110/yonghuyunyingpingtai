@@ -1,1 +1,829 @@
 
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>用户运营平台解决方案</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --bg-soft: #f1f5f9;
+      --bg-card: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --text-soft: #475569;
+      --text-light: #64748b;
+      --dark: #0f172a;
+      --white: #ffffff;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --container: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: linear-gradient(to bottom, #f8fafc, #ffffff, #f1f5f9);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(var(--container), calc(100% - 48px)); margin: 0 auto; }
+    .section { padding: 88px 0; }
+    .section.alt { background: var(--bg-soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .section-line { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top right, rgba(59,130,246,.10), transparent 28%),
+        radial-gradient(circle at left center, rgba(99,102,241,.10), transparent 25%),
+        linear-gradient(to bottom, #f8fafc, #ffffff);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 40px;
+      align-items: center;
+      padding: 88px 0 96px;
+    }
+
+    h1 {
+      margin: 20px 0 0;
+      font-size: clamp(38px, 5.5vw, 68px);
+      line-height: 1.06;
+      letter-spacing: -.03em;
+    }
+
+    h1 .muted { color: #64748b; }
+    .hero-desc {
+      margin-top: 22px;
+      max-width: 760px;
+      font-size: 18px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 22px;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .btn.primary {
+      background: var(--dark);
+      color: #fff;
+      border-color: var(--dark);
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .tag {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eef2f7;
+      color: #334155;
+      font-size: 13px;
+      border: 1px solid var(--line);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .card-body { padding: 24px; }
+    .card-header { padding: 22px 24px 0; }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .icon-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--bg-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .overview-list { display: grid; gap: 12px; margin-top: 8px; }
+    .overview-item { border: 1px solid var(--line); background: var(--bg-soft); border-radius: 18px; padding: 16px; }
+    .overview-item-head { display: flex; gap: 12px; align-items: flex-start; }
+    .overview-name { font-weight: 700; }
+    .mini-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .mini-tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text-soft);
+    }
+
+    .section-head { max-width: 820px; margin-bottom: 40px; }
+    .section-head h2 {
+      margin: 14px 0 0;
+      font-size: clamp(30px, 3.2vw, 46px);
+      line-height: 1.18;
+      letter-spacing: -.02em;
+    }
+    .section-head p {
+      margin: 16px 0 0;
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+    .feature-card h3, .value-card h3, .journey-card h3 { margin: 14px 0 0; font-size: 20px; }
+    .feature-card p, .value-card p, .journey-card p {
+      margin: 12px 0 0;
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .solution-points { margin-top: 14px; display: grid; gap: 10px; }
+    .solution-point {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-soft);
+    }
+
+    .check {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--dark);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .interactive {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .menu-list { display: grid; gap: 12px; }
+    .menu-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 18px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .menu-btn:hover { background: #f8fafc; }
+    .menu-btn.active { background: var(--dark); border-color: var(--dark); color: #fff; box-shadow: var(--shadow); }
+    .menu-btn-title { font-size: 16px; font-weight: 700; }
+    .menu-btn-desc { margin-top: 8px; font-size: 12px; line-height: 1.7; color: inherit; opacity: .78; }
+
+    .detail-panel { min-height: 420px; overflow: hidden; }
+    .detail-title { display: flex; gap: 14px; align-items: flex-start; }
+    .detail-title h3 { margin: 0; font-size: 30px; }
+    .detail-title p { margin: 10px 0 0; font-size: 14px; line-height: 1.9; color: var(--text-soft); }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px; }
+    .detail-block-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+    .pill-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .pill { border: 1px solid var(--line); background: var(--bg-soft); border-radius: 16px; padding: 14px 16px; font-size: 14px; color: var(--text-soft); }
+    .scene-list { display: grid; gap: 12px; }
+    .scene-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      font-size: 14px;
+      line-height: 1.9;
+      color: var(--text-soft);
+    }
+
+    .screen-shell { overflow: hidden; padding: 0; }
+    .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #f1f5f9;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 999px; background: #cbd5e1; }
+    .window-title { margin-left: 6px; font-size: 14px; font-weight: 600; color: #64748b; }
+    .screen-content { padding: 24px; background: #fff; }
+
+    .top-row, .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .muted { color: var(--text-light); }
+    .small { font-size: 14px; }
+    .tiny { font-size: 12px; }
+    .strong { font-weight: 700; }
+    .screen-title { font-size: 24px; font-weight: 700; }
+
+    .stat-grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+    .stat-card, .panel-soft { border: 1px solid var(--line); background: var(--bg-soft); border-radius: 18px; padding: 16px; }
+    .stat-value { margin-top: 10px; font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+
+    .table-wrap { margin-top: 18px; border: 1px solid var(--line); background: var(--bg-soft); border-radius: 18px; padding: 16px; }
+    .table-grid { display: grid; gap: 12px; }
+    .table-row-5, .table-head-5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+    .cell {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .wizard-grid { display: grid; grid-template-columns: 220px 1fr; gap: 20px; margin-top: 18px; }
+    .step-list { display: grid; gap: 10px; }
+    .step-item { padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: #fff; color: var(--text-soft); font-size: 14px; }
+    .step-item.active { background: var(--dark); border-color: var(--dark); color: #fff; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .field label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-light); }
+    .input-mock, .textarea-mock {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+    .textarea-mock { min-height: 116px; }
+    .action-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+
+    .review-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; margin-top: 18px; }
+    .review-item { border: 1px solid var(--line); background: #fff; border-radius: 18px; padding: 16px; margin-top: 12px; }
+    .priority { padding: 6px 10px; border-radius: 999px; background: #f1f5f9; font-size: 12px; color: var(--text-soft); border: 1px solid var(--line); white-space: nowrap; }
+
+    .chart-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 20px; margin-top: 18px; }
+    .bar-chart {
+      height: 240px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+    .bar { flex: 1; background: #cbd5e1; border-radius: 14px 14px 0 0; min-height: 30px; }
+    .warning-list { display: grid; gap: 12px; margin-top: 14px; }
+    .warning-item { border: 1px solid var(--line); background: #fff; border-radius: 18px; padding: 16px; font-size: 14px; line-height: 1.9; color: var(--text-soft); }
+
+    .journey-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+    .journey-card { position: relative; }
+    .step-label { font-size: 12px; font-weight: 700; color: #94a3b8; letter-spacing: .08em; }
+    .journey-arrow { position: absolute; right: -18px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #cbd5e1; font-weight: 700; }
+
+    .value-top { font-size: 13px; color: var(--text-light); }
+    .value-main { margin-top: 12px; font-size: 32px; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
+
+    @media (max-width: 1100px) {
+      .hero-grid, .interactive, .review-grid, .chart-grid, .wizard-grid, .detail-grid { grid-template-columns: 1fr; }
+      .grid-4, .journey-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .journey-arrow { display: none; }
+    }
+
+    @media (max-width: 760px) {
+      .container { width: min(var(--container), calc(100% - 28px)); }
+      .section { padding: 64px 0; }
+      .grid-4, .journey-grid, .stat-grid-4, .form-grid, .pill-grid, .table-head-5, .table-row-5 { grid-template-columns: 1fr; }
+      .hero-grid { padding: 60px 0 68px; }
+      .screen-title { font-size: 22px; }
+      .detail-title h3 { font-size: 24px; }
+      .card-body, .screen-content { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="badge">用户运营平台解决方案</span>
+        <h1>用一套统一的用户运营平台，<span class="muted">解决用户分散、运营粗放、触达低效、价值难沉淀</span></h1>
+        <p class="hero-desc">
+          面向用户精细化运营场景，打造覆盖用户画像、标签体系、人群运营、任务触达、生命周期管理与效果分析的一体化用户运营平台，
+          让运营从“围绕活动做动作”升级为“围绕用户全生命周期做经营”。
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#solution">查看解决方案 →</a>
+          <a class="btn" href="#capabilities">核心能力概览</a>
+        </div>
+        <div class="tag-list">
+          <span class="tag">统一用户画像</span>
+          <span class="tag">标签体系沉淀</span>
+          <span class="tag">人群精细运营</span>
+          <span class="tag">任务触达闭环</span>
+          <span class="tag">生命周期经营</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title"><span class="icon-box">👤</span>方案总览</div>
+        </div>
+        <div class="card-body">
+          <div class="overview-list">
+            <div class="overview-item">
+              <div class="overview-item-head">
+                <span class="icon-box">🧬</span>
+                <div>
+                  <div class="overview-name">用户画像与标签中心</div>
+                  <div class="mini-tags">
+                    <span class="mini-tag">统一用户视图</span>
+                    <span class="mini-tag">行为 / 属性标签</span>
+                    <span class="mini-tag">画像动态更新</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="overview-item">
+              <div class="overview-item-head">
+                <span class="icon-box">👥</span>
+                <div>
+                  <div class="overview-name">人群运营中心</div>
+                  <div class="mini-tags">
+                    <span class="mini-tag">人群圈选</span>
+                    <span class="mini-tag">分层运营</span>
+                    <span class="mini-tag">动态人群包</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="overview-item">
+              <div class="overview-item-head">
+                <span class="icon-box">📣</span>
+                <div>
+                  <div class="overview-name">任务与触达中心</div>
+                  <div class="mini-tags">
+                    <span class="mini-tag">任务编排</span>
+                    <span class="mini-tag">多渠道触达</span>
+                    <span class="mini-tag">自动化运营</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="overview-item">
+              <div class="overview-item-head">
+                <span class="icon-box">📈</span>
+                <div>
+                  <div class="overview-name">分析与生命周期中心</div>
+                  <div class="mini-tags">
+                    <span class="mini-tag">用户价值分析</span>
+                    <span class="mini-tag">生命周期看板</span>
+                    <span class="mini-tag">运营效果闭环</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">业务痛点</span>
+        <h2>为什么需要统一的用户运营平台</h2>
+        <p>当用户规模、行为链路和业务场景不断变复杂，依赖人工拉数、手工圈人和临时触达的方式，已经很难支撑精细化运营。</p>
+      </div>
+      <div class="grid-4">
+        <div class="card feature-card"><div class="card-body"><span class="icon-box">🧩</span><h3>用户数据分散</h3><p>用户基础信息、行为数据、线索状态、订单数据和触达记录分散在不同系统，无法形成统一用户视图。</p></div></div>
+        <div class="card feature-card"><div class="card-body"><span class="icon-box">🏷️</span><h3>标签体系不统一</h3><p>各业务自己定义标签和人群，口径不一致，难复用，也难支撑跨业务的统一运营策略。</p></div></div>
+        <div class="card feature-card"><div class="card-body"><span class="icon-box">📣</span><h3>运营动作碎片化</h3><p>人群圈选、任务配置、触达发送和效果复盘分散在多个后台里，链路长、协同慢、执行效率低。</p></div></div>
+        <div class="card feature-card"><div class="card-body"><span class="icon-box">📉</span><h3>用户价值难沉淀</h3><p>只能看到单次活动结果，难以持续跟踪用户生命周期变化，无法沉淀高价值用户运营方法。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="solution">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">解决方案</span>
+        <h2>一套平台，打通用户画像、人群运营、任务触达与生命周期分析</h2>
+        <p>核心不是只做一个用户后台，而是围绕“用户识别 × 人群分层 × 运营动作 × 价值分析”建立统一底座，让每一次运营都能作用到用户长期价值提升。</p>
+      </div>
+      <div class="grid-4">
+        <div class="card"><div class="card-header"><div class="card-title"><span class="icon-box">🧬</span>用户画像与标签中心</div></div><div class="card-body"><div class="solution-points"><div class="solution-point"><span class="check">✓</span><span>统一用户主视图</span></div><div class="solution-point"><span class="check">✓</span><span>属性 / 行为 / 意向标签</span></div><div class="solution-point"><span class="check">✓</span><span>画像动态沉淀更新</span></div></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title"><span class="icon-box">👥</span>人群运营中心</div></div><div class="card-body"><div class="solution-points"><div class="solution-point"><span class="check">✓</span><span>标签圈选与动态人群</span></div><div class="solution-point"><span class="check">✓</span><span>分层运营策略</span></div><div class="solution-point"><span class="check">✓</span><span>人群包复用与沉淀</span></div></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title"><span class="icon-box">📣</span>任务与触达中心</div></div><div class="card-body"><div class="solution-points"><div class="solution-point"><span class="check">✓</span><span>运营任务配置</span></div><div class="solution-point"><span class="check">✓</span><span>多渠道触达</span></div><div class="solution-point"><span class="check">✓</span><span>自动化任务流转</span></div></div></div></div>
+        <div class="card"><div class="card-header"><div class="card-title"><span class="icon-box">📈</span>分析与生命周期中心</div></div><div class="card-body"><div class="solution-points"><div class="solution-point"><span class="check">✓</span><span>用户转化与留存分析</span></div><div class="solution-point"><span class="check">✓</span><span>生命周期状态识别</span></div><div class="solution-point"><span class="check">✓</span><span>运营效果闭环复盘</span></div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="capabilities">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">核心能力</span>
+        <h2>既能支撑日常用户运营，也能支撑用户长期经营</h2>
+        <p>围绕用户对象建立标准能力中心，让运营、产品、增长和业务团队都围绕同一套用户运营平台协作。点击左侧模块，可查看详细说明、场景与具体能力。</p>
+      </div>
+      <div class="interactive">
+        <div class="card"><div class="card-body"><div class="menu-list" id="capabilityMenu"></div></div></div>
+        <div class="card detail-panel"><div class="card-body" id="capabilityDetail"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="screens">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">功能界面示意</span>
+        <p>选取 4 个最关键的后台页面，帮助更直观地理解用户运营平台如何承载用户中心、人群圈选、运营任务配置和效果分析。</p>
+      </div>
+      <div class="interactive">
+        <div class="card"><div class="card-body"><div class="menu-list" id="screenMenu"></div></div></div>
+        <div class="card screen-shell"><div id="screenDetail"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-line section">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">业务流程</span>
+        <h2>把用户运营从“单次触达”升级成“全生命周期经营”</h2>
+        <p>通过统一画像、统一人群、统一任务和统一分析，把每一次运营动作都沉淀为可复用的用户经营能力。</p>
+      </div>
+      <div class="journey-grid">
+        <div class="card journey-card"><div class="card-body"><div class="step-label">STEP 01</div><h3>统一识别用户</h3><p>汇聚用户属性、行为、线索、订单和触达数据，形成统一用户画像和标签基础。</p></div><div class="journey-arrow">→</div></div>
+        <div class="card journey-card"><div class="card-body"><div class="step-label">STEP 02</div><h3>圈选与分层运营</h3><p>基于标签、行为和生命周期圈选目标人群，制定差异化运营策略和任务。</p></div><div class="journey-arrow">→</div></div>
+        <div class="card journey-card"><div class="card-body"><div class="step-label">STEP 03</div><h3>触达与动作执行</h3><p>通过站内外渠道执行用户任务，跟踪送达、点击、参与、留资和转化情况。</p></div><div class="journey-arrow">→</div></div>
+        <div class="card journey-card"><div class="card-body"><div class="step-label">STEP 04</div><h3>分析与持续优化</h3><p>围绕生命周期变化、用户价值和运营效果做复盘，持续优化人群策略和任务规则。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="badge">业务价值</span>
+        <h2>最终带来的，不只是一个用户后台，而是一套持续增长的用户经营能力</h2>
+        <p>用户运营平台的目标不是把用户管理线上化，而是帮助业务真正实现用户可识别、人群可运营、动作可执行、价值可沉淀。</p>
+      </div>
+      <div class="grid-4">
+        <div class="card value-card"><div class="card-body"><div class="value-top">提升识别效率</div><div class="value-main">统一用户视图</div><p>通过统一画像和标签体系，让业务快速理解用户是谁、做过什么、当前处于什么状态。</p></div></div>
+        <div class="card value-card"><div class="card-body"><div class="value-top">提升运营精准度</div><div class="value-main">分层精细化</div><p>基于标签和行为做人群分层，让不同用户接收到不同任务和触达策略。</p></div></div>
+        <div class="card value-card"><div class="card-body"><div class="value-top">提升执行效率</div><div class="value-main">任务自动化</div><p>通过统一任务配置和多渠道触达，减少手工流转，让运营动作更快落地。</p></div></div>
+        <div class="card value-card"><div class="card-body"><div class="value-top">支撑长期增长</div><div class="value-main">生命周期经营</div><p>把单次活动结果沉淀为长期的用户经营能力，持续支持拉新、促活、转化和留存。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const capabilities = [
+      {
+        id: 'profile-center',
+        title: '用户画像与标签中心',
+        summary: '围绕用户属性、行为和意向建立统一画像与标签底座。',
+        desc: '解决用户信息分散、标签口径不统一的问题，让平台能沉淀可复用、可扩展、可持续更新的用户画像体系。',
+        items: ['统一用户档案', '属性 / 行为标签', '意向识别', '画像动态更新'],
+        scenes: ['查看用户最近浏览、留资、下单和触达记录', '识别高潜用户、沉默用户和高价值用户', '把业务规则沉淀为长期可复用标签']
+      },
+      {
+        id: 'segment-center',
+        title: '人群运营中心',
+        summary: '通过标签和行为组合快速圈选、沉淀和复用目标人群。',
+        desc: '解决圈人依赖人工拉数、结果不可复用的问题，让不同业务目标都能快速基于同一套标签体系构建运营对象池。',
+        items: ['人群圈选', '动态人群包', '分层策略', '人群资产沉淀'],
+        scenes: ['按新客、意向用户、沉默用户做差异化运营', '按不同业务目标快速复用已有高价值人群包', '动态更新人群，避免每次手工重跑']
+      },
+      {
+        id: 'task-center',
+        title: '任务与触达中心',
+        summary: '统一配置用户任务、权益和多渠道触达动作。',
+        desc: '解决任务配置、消息发送和权益投放分散的问题，让运营能够围绕用户路径设计完整的触达和转化动作。',
+        items: ['任务配置', '权益绑定', '多渠道触达', '自动化流转'],
+        scenes: ['对浏览未留资用户自动发起提醒任务', '对高意向用户发放权益并同步站内外触达', '对已转化用户切换到服务或留存任务']
+      },
+      {
+        id: 'lifecycle-center',
+        title: '分析与生命周期中心',
+        summary: '围绕用户状态变化、转化漏斗和长期价值做分析沉淀。',
+        desc: '解决用户运营只看单次动作、不看长期价值的问题，让业务可以持续识别用户生命周期变化，并围绕价值提升做优化。',
+        items: ['生命周期识别', '转化漏斗', '用户价值分析', '运营效果复盘'],
+        scenes: ['识别用户从潜客到成交再到复购的流转状态', '分析不同人群包的留资、下单和留存效果', '围绕用户价值变化持续优化策略']
+      }
+    ];
+
+    const productScreens = [
+      {
+        id: 'profile',
+        title: '用户中心页',
+        summary: '统一查看用户画像、标签、行为轨迹和业务状态。',
+        highlights: ['统一画像', '行为轨迹', '用户详情']
+      },
+      {
+        id: 'segment',
+        title: '人群圈选页',
+        summary: '通过标签和行为条件组合快速创建目标人群包。',
+        highlights: ['标签组合', '规模预估', '动态人群']
+      },
+      {
+        id: 'task',
+        title: '运营任务配置页',
+        summary: '配置用户任务、触达方式、权益内容和执行规则。',
+        highlights: ['任务编排', '触达配置', '规则控制']
+      },
+      {
+        id: 'analysis',
+        title: '用户运营分析看板',
+        summary: '围绕用户分层、转化、留存和生命周期价值做分析。',
+        highlights: ['分层分析', '漏斗分析', '价值评估']
+      }
+    ];
+
+    const capabilityMenu = document.getElementById('capabilityMenu');
+    const capabilityDetail = document.getElementById('capabilityDetail');
+    const screenMenu = document.getElementById('screenMenu');
+    const screenDetail = document.getElementById('screenDetail');
+
+    let activeCapability = capabilities[0].id;
+    let activeScreen = productScreens[0].id;
+
+    function renderCapabilityMenu() {
+      capabilityMenu.innerHTML = capabilities.map(item => `
+        <button class="menu-btn ${item.id === activeCapability ? 'active' : ''}" data-id="${item.id}">
+          <div class="menu-btn-title">${item.title}</div>
+          <div class="menu-btn-desc">${item.summary}</div>
+        </button>
+      `).join('');
+
+      capabilityMenu.querySelectorAll('.menu-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeCapability = btn.dataset.id;
+          renderCapabilityMenu();
+          renderCapabilityDetail();
+        });
+      });
+    }
+
+    function renderCapabilityDetail() {
+      const item = capabilities.find(x => x.id === activeCapability) || capabilities[0];
+      capabilityDetail.innerHTML = `
+        <div class="detail-title">
+          <span class="icon-box">✨</span>
+          <div>
+            <h3>${item.title}</h3>
+            <p>${item.desc}</p>
+          </div>
+        </div>
+        <div class="detail-grid">
+          <div>
+            <div class="detail-block-title">包含能力</div>
+            <div class="pill-grid">
+              ${item.items.map(x => `<div class="pill">${x}</div>`).join('')}
+            </div>
+          </div>
+          <div>
+            <div class="detail-block-title">典型场景</div>
+            <div class="scene-list">
+              ${item.scenes.map(x => `<div class="scene-item"><span class="check">✓</span><span>${x}</span></div>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderScreenMenu() {
+      screenMenu.innerHTML = productScreens.map(item => `
+        <button class="menu-btn ${item.id === activeScreen ? 'active' : ''}" data-id="${item.id}">
+          <div class="menu-btn-title">${item.title}</div>
+          <div class="menu-btn-desc">${item.summary}</div>
+          <div class="mini-tags" style="margin-top:12px;">
+            ${item.highlights.map(tag => `<span class="mini-tag" style="background:${item.id === activeScreen ? 'rgba(255,255,255,.08)' : '#f1f5f9'};color:${item.id === activeScreen ? '#e2e8f0' : '#475569'};border-color:${item.id === activeScreen ? 'rgba(255,255,255,.08)' : '#e2e8f0'};">${tag}</span>`).join('')}
+          </div>
+        </button>
+      `).join('');
+
+      screenMenu.querySelectorAll('.menu-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeScreen = btn.dataset.id;
+          renderScreenMenu();
+          renderScreenDetail();
+        });
+      });
+    }
+
+    function screenWindow(title, inner) {
+      return `
+        <div class="window-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="window-title">${title} · 页面示意</span>
+        </div>
+        <div class="screen-content">${inner}</div>
+      `;
+    }
+
+    function renderScreenDetail() {
+      const screens = {
+        profile: `
+          <div class="flex-between">
+            <div>
+              <div class="screen-title">用户中心</div>
+              <div class="small muted" style="margin-top:6px;">统一查看用户画像、行为、标签和业务状态</div>
+            </div>
+            <div class="btn">导出画像</div>
+          </div>
+          <div class="stat-grid-4">
+            <div class="stat-card"><div class="tiny muted">累计访问</div><div class="stat-value">28次</div></div>
+            <div class="stat-card"><div class="tiny muted">近30天留资</div><div class="stat-value">3次</div></div>
+            <div class="stat-card"><div class="tiny muted">最近触达</div><div class="stat-value">5次</div></div>
+            <div class="stat-card"><div class="tiny muted">用户分层</div><div class="stat-value">高潜</div></div>
+          </div>
+          <div class="review-grid">
+            <div class="panel-soft">
+              <div class="strong small">标签画像</div>
+              <div class="warning-list">
+                <div class="warning-item">新能源意向高</div>
+                <div class="warning-item">近14天高频浏览商详</div>
+                <div class="warning-item">到店意向强</div>
+              </div>
+            </div>
+            <div class="panel-soft">
+              <div class="strong small">行为轨迹</div>
+              <div class="warning-list">
+                <div class="warning-item">04-08 浏览 Model Y 商详</div>
+                <div class="warning-item">04-07 点击到店礼活动</div>
+                <div class="warning-item">04-05 提交试驾预约</div>
+              </div>
+            </div>
+          </div>
+        `,
+        segment: `
+          <div class="top-row">
+            <div>
+              <div class="screen-title">人群圈选</div>
+              <div class="small muted" style="margin-top:6px;">通过标签、行为和业务条件创建目标人群包</div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;"><div class="btn">保存人群包</div><div class="btn primary">创建任务</div></div>
+          </div>
+          <div class="stat-grid-4">
+            <div class="stat-card"><div class="tiny muted">预估覆盖用户</div><div class="stat-value">86,240</div></div>
+            <div class="stat-card"><div class="tiny muted">高意向用户</div><div class="stat-value">18,420</div></div>
+            <div class="stat-card"><div class="tiny muted">沉默用户</div><div class="stat-value">12,680</div></div>
+            <div class="stat-card"><div class="tiny muted">近7天活跃</div><div class="stat-value">42%</div></div>
+          </div>
+          <div class="review-grid">
+            <div class="panel-soft">
+              <div class="strong small">圈选条件</div>
+              <div class="warning-list">
+                <div class="warning-item">近30天浏览商详 ≥ 3次</div>
+                <div class="warning-item">近14天未留资</div>
+                <div class="warning-item">用户分层 = 高潜</div>
+              </div>
+            </div>
+            <div class="panel-soft">
+              <div class="strong small">人群洞察</div>
+              <div class="warning-list">
+                <div class="warning-item">该人群夜间活跃度更高</div>
+                <div class="warning-item">更适合发放试驾礼和到店券</div>
+                <div class="warning-item">近7天转化率高于大盘 16%</div>
+              </div>
+            </div>
+          </div>
+        `,
+        task: `
+          <div class="flex-between">
+            <div>
+              <div class="screen-title">运营任务配置</div>
+              <div class="small muted" style="margin-top:6px;">统一配置用户任务、权益、触达方式和执行规则</div>
+            </div>
+            <div class="btn primary">发布任务</div>
+          </div>
+          <div class="wizard-grid">
+            <div class="panel-soft">
+              <div class="step-list">
+                <div class="step-item active">1. 选择人群</div>
+                <div class="step-item">2. 配置任务</div>
+                <div class="step-item">3. 绑定权益</div>
+                <div class="step-item">4. 触达渠道</div>
+                <div class="step-item">5. 发布规则</div>
+              </div>
+            </div>
+            <div class="panel-soft">
+              <div class="form-grid">
+                ${['任务名称','目标人群','任务类型','触达渠道','发放权益','执行周期'].map(label => `<div class="field"><label>${label}</label><div class="input-mock">请输入或选择</div></div>`).join('')}
+              </div>
+              <div class="field" style="margin-top:14px;"><label>任务说明</label><div class="textarea-mock">支持配置提醒任务、召回任务、权益发放任务和自动化运营流程</div></div>
+              <div class="action-row"><div class="btn">保存草稿</div><div class="btn primary">下一步</div></div>
+            </div>
+          </div>
+        `,
+        analysis: `
+          <div class="flex-between">
+            <div>
+              <div class="screen-title">用户运营分析看板</div>
+              <div class="small muted" style="margin-top:6px;">围绕用户分层、转化、留存和生命周期价值做分析</div>
+            </div>
+            <div class="btn">近30天</div>
+          </div>
+          <div class="stat-grid-4">
+            <div class="stat-card"><div class="tiny muted">活跃用户数</div><div class="stat-value">126,420</div></div>
+            <div class="stat-card"><div class="tiny muted">留资转化率</div><div class="stat-value">14.8%</div></div>
+            <div class="stat-card"><div class="tiny muted">召回成功率</div><div class="stat-value">22.6%</div></div>
+            <div class="stat-card"><div class="tiny muted">高价值用户占比</div><div class="stat-value">18%</div></div>
+          </div>
+          <div class="chart-grid">
+            <div class="panel-soft">
+              <div class="strong small">趋势示意</div>
+              <div class="bar-chart">
+                <div class="bar" style="height:34%"></div><div class="bar" style="height:46%"></div><div class="bar" style="height:58%"></div><div class="bar" style="height:66%"></div><div class="bar" style="height:74%"></div><div class="bar" style="height:82%"></div><div class="bar" style="height:78%"></div><div class="bar" style="height:86%"></div>
+              </div>
+            </div>
+            <div class="panel-soft">
+              <div class="strong small">分析结论</div>
+              <div class="warning-list">
+                <div class="warning-item">高潜用户的留资转化率明显高于全量用户</div>
+                <div class="warning-item">沉默用户召回任务在短信 + 站内信组合下效果更好</div>
+                <div class="warning-item">高价值用户更适合进入长期服务和复购运营链路</div>
+              </div>
+            </div>
+          </div>
+        `
+      };
+
+      const current = screens[activeScreen] || screens.profile;
+      const title = productScreens.find(x => x.id === activeScreen)?.title || '功能页面';
+      screenDetail.innerHTML = screenWindow(title, current);
+    }
+
+    renderCapabilityMenu();
+    renderCapabilityDetail();
+    renderScreenMenu();
+    renderScreenDetail();
+  </script>
+</body>
+</html>
